@@ -7,12 +7,14 @@
   "scripts": {
     "dev": "concurrently \"cd server && yarn start\" \"cd client && yarn start\"",
     "build:server": "cd server && yarn build && mv build/ ../dist/",
-    "build:client": "cd client && yarn build && mv build/ ../dist/client",
+    "build:client": "cd client && yarn build && mv build/ ../dist/src/client",
     "install:server": "cp server/package.json ./dist/ && cd dist && yarn install --production",
     "deploy": "yarn build:server && yarn install:server && yarn build:client",
-    "start": "node dist/src/index.js"
+    "start": "node dist/src/index.js",
+    "clean": "rimraf dist"
   },
   "devDependencies": {
-    "concurrently": "^6.3.0"
+    "concurrently": "^6.3.0",
+    "rimraf": "^3.0.2"
   }
 }
