@@ -9,13 +9,13 @@
   },
   "scripts": {
     "dev": "concurrently \"cd server && yarn start\" \"cd client && yarn start\"",
-    "build:server": "cd server && yarn build && mv build/ ../dist/",
-    "build:client": "cd client && yarn build && mv build/ ../dist/src/client",
-    "install:server": "cp server/package.json ./dist/ && cd dist && yarn install --production",
-    "deploy": "yarn build:server && yarn install:server && yarn build:client",
-    "start": "node dist/src/index.js",
-    "postinstall": "cd dist && yarn install --production",
-    "clean": "rimraf dist"
+    "build:server": "cd server && yarn build && mv build/ ../deploy/",
+    "build:client": "cd client && yarn build && mv build/ ../deploy/src/client",
+    "copy:package": "cp server/package.json ./deploy/",
+    "deploy": "yarn build:server && yarn copy:package && yarn build:client",
+    "start": "node deploy/src/index.js",
+    "postinstall": "cd deploy && yarn install --production",
+    "clean": "rimraf deploy"
   },
   "devDependencies": {
     "concurrently": "^6.3.0",
