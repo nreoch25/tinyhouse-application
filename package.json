@@ -11,6 +11,7 @@
     "install:server": "cp server/package.json ./dist/ && cd dist && yarn install --production",
     "deploy": "yarn build:server && yarn install:server && yarn build:client",
     "start": "node dist/src/index.js",
+    "postinstall": "yarn deploy",
     "clean": "rimraf dist"
   },
   "devDependencies": {
