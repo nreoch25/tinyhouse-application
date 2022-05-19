@@ -4,6 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "16.13.1"
+  },
   "scripts": {
     "dev": "concurrently \"cd server && yarn start\" \"cd client && yarn start\"",
     "build:server": "cd server && yarn build && mv build/ ../dist/",
