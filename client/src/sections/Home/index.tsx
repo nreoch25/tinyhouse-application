@@ -1,6 +1,6 @@
 import { Layout, Typography, Col, Row } from "antd";
 import { useQuery } from "@apollo/client";
-import { RouteComponentProps, Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { LISTINGS } from "../../lib/graphql/queries";
 import {
   Listings as ListingsData,
@@ -9,6 +9,7 @@ import {
 import { ListingsFilter } from "../../lib/graphql/globalTypes";
 import { HomeHero, HomeListings, HomeListingsSkeleton } from "./components";
 import { displayErrorMessage } from "../../lib/utils";
+import { useScrollTop } from "../../lib/hooks/useScrollTop";
 import mapBackground from "./assets/map-background.jpeg";
 import sanFransiscoImage from "./assets/san-fransisco.jpeg";
 import cancunImage from "./assets/cancun.jpeg";
@@ -19,14 +20,18 @@ const { Paragraph, Title } = Typography;
 const PAGE_LIMIT = 4;
 const PAGE_NUMBER = 1;
 
-const Home = ({ history }: RouteComponentProps) => {
+const Home = () => {
+  let history = useHistory();
   const { loading, data } = useQuery<ListingsData, ListingsVariables>(LISTINGS, {
     variables: {
       filter: ListingsFilter.PRICE_HIGH_TO_LOW,
       limit: PAGE_LIMIT,
       page: PAGE_NUMBER,
     },
+    fetchPolicy: "cache-and-network",
   });
+
+  useScrollTop();
 
   const renderListingsSection = () => {
     if (loading) {

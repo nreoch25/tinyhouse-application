@@ -13,6 +13,17 @@ export const Stripe = {
 
     return response;
   },
+  disconnect: async (stripeUserId: string): Promise<stripe.OAuthDeauthorization> => {
+    console.log("DISCONNECT");
+    const response = await client.oauth.deauthorize({
+      client_id: `${process.env.S_CLIENT_ID}`,
+      stripe_user_id: stripeUserId,
+    });
+
+    console.log({ stripeResponse: response });
+
+    return response;
+  },
   charge: async (amount: number, source: string, stripeAccount: string): Promise<void> => {
     const res = await client.charges.create(
       {
@@ -22,7 +33,7 @@ export const Stripe = {
         application_fee_amount: Math.round(amount * 0.05),
       },
       {
-        stripe_account: stripeAccount,
+        stripeAccount,
       }
     );
 

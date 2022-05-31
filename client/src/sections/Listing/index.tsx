@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useQuery } from "@apollo/client";
 import { Moment } from "moment";
 import { Col, Row, Layout } from "antd";
-import { RouteComponentProps } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { LISTING } from "../../lib/graphql/queries";
@@ -16,6 +16,7 @@ import { ListingBookings } from "./components/ListingBookings";
 import { CreateBooking } from "./components/CreateBooking";
 import { CreateBookingModal } from "./components/CreateBookingModal";
 import { Viewer } from "../../lib/types";
+import { useScrollTop } from "../../lib/hooks/useScrollTop";
 
 interface MatchParams {
   id: string;
@@ -28,20 +29,24 @@ interface Props {
 const PAGE_LIMIT = 3;
 const { Content } = Layout;
 
-const Listing = ({ viewer, match }: Props & RouteComponentProps<MatchParams>) => {
+const Listing = ({ viewer }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [bookingsPage, setBookingsPage] = useState(1);
   const [checkInDate, setCheckInDate] = useState<Moment | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Moment | null>(null);
   const stripePromise = useMemo(() => loadStripe(`${process.env.REACT_APP_S_PUBLISHABLE_KEY}`), []);
 
+  const { id } = useParams<MatchParams>();
+
   const { loading, data, error, refetch } = useQuery<ListingData, ListingVariables>(LISTING, {
     variables: {
-      id: match.params.id,
+      id,
       bookingsPage,
       limit: PAGE_LIMIT,
     },
   });
+
+  useScrollTop();
 
   const clearBookingData = () => {
     setModalVisible(false);

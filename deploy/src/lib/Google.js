@@ -56,9 +56,7 @@ exports.Google = {
                 key: process.env.G_GEOCODE_KEY,
             },
         };
-        console.log({ req });
         const res = yield client.geocode(req);
-        console.log({ results: JSON.stringify(res.data.results[0], null, 2) });
         if (res.status < 200 || res.status > 299) {
             throw new Error("failed to geocode address");
         }

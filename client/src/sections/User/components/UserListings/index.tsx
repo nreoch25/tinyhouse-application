@@ -15,8 +15,6 @@ const { Item } = List;
 const UserListings = ({ userListings, listingsPage, limit, setListingsPage }: Props) => {
   const { total, result } = userListings;
 
-  console.log({ result, total });
-
   const userListingsList = (
     <List
       grid={{

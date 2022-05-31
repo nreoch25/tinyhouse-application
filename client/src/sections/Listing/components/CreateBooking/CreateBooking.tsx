@@ -48,7 +48,6 @@ const CreateBooking = ({
   const disabledDate = (currentDate: any) => {
     if (currentDate) {
       const dateIsBeforeEndOfDay = currentDate.isBefore(moment().endOf("day"));
-      console.log({ dateIsBeforeEndOfDay });
       return dateIsBeforeEndOfDay || dateIsBooked(currentDate);
     }
     return true;

@@ -25,6 +25,15 @@ exports.Stripe = {
         });
         return response;
     }),
+    disconnect: (stripeUserId) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("DISCONNECT");
+        const response = yield client.oauth.deauthorize({
+            client_id: `${process.env.S_CLIENT_ID}`,
+            stripe_user_id: stripeUserId,
+        });
+        console.log({ stripeResponse: response });
+        return response;
+    }),
     charge: (amount, source, stripeAccount) => __awaiter(void 0, void 0, void 0, function* () {
         const res = yield client.charges.create({
             amount,
@@ -32,7 +41,7 @@ exports.Stripe = {
             source,
             application_fee_amount: Math.round(amount * 0.05),
         }, {
-            stripe_account: stripeAccount,
+            stripeAccount,
         });
         if (res.status !== "succeeded") {
             throw new Error("failed to create charge with Stripe");

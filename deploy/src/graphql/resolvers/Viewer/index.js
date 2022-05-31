@@ -117,7 +117,6 @@ const logInViaGoogle = (code, token, db, res) => __awaiter(void 0, void 0, void 
 });
 const logInViaCookie = (db, req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const viewer = yield db.users.findOne({ _id: req.signedCookies.viewer });
-    console.log({ viewer });
     if (!viewer) {
         res.clearCookie("viewer", cookieOptions);
     }
@@ -243,6 +242,14 @@ const viewerResolvers = {
                 let viewer = yield (0, utils_1.authorize)(db, req);
                 if (!viewer) {
                     throw new Error("viewer cannot be found");
+                }
+                console.log({ viewer });
+                if (viewer.walletId) {
+                    console.log({ walletId: viewer.walletId });
+                    const wallet = yield lib_1.Stripe.disconnect(viewer.walletId);
+                    if (!wallet) {
+                        throw new Error("stripe disconnect error");
+                    }
                 }
                 const updateRes = yield db.users.findOneAndUpdate({ _id: viewer._id }, { $set: { walletId: "" } }, { returnDocument: "after" });
                 if (!updateRes.value) {

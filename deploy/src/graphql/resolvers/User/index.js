@@ -20,7 +20,6 @@ exports.userResolvers = {
                     throw new Error("user can't be found");
                 }
                 const viewer = yield (0, utils_1.authorize)(db, req);
-                console.log({ viewer });
                 if (viewer && viewer._id === user._id) {
                     user.authorized = true;
                 }
@@ -43,7 +42,6 @@ exports.userResolvers = {
         },
         bookings: (user, { limit, page }, { db }) => __awaiter(void 0, void 0, void 0, function* () {
             try {
-                console.log({ user });
                 if (!user.authorized) {
                     return null;
                 }

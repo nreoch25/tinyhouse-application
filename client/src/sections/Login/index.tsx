@@ -9,6 +9,7 @@ import { useLinkedInLogin } from "../../lib/hooks/useLinkedInLogin";
 import { LogInGoogle as LogInGoogleData } from "../../lib/graphql/mutations/GoogleLogin/__generated__/LogInGoogle";
 import { LogInLinkedIn as LogInLinkedInData } from "../../lib/graphql/mutations/LinkedInLogin/__generated__/LogInLinkedIn";
 import { displaySuccessNotification } from "../../lib/utils";
+import { useScrollTop } from "../../lib/hooks/useScrollTop";
 
 interface LoginProps {
   setViewer: (viewer: Viewer) => void;
@@ -45,6 +46,8 @@ const Login = ({ setViewer }: LoginProps) => {
     useLinkedInLogin({
       onCompleted: onCompletedLinkedIn,
     });
+
+  useScrollTop();
 
   if (logInGoogleLoading || logInLinkedInLoading) {
     return (

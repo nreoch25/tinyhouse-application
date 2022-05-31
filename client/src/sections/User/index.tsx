@@ -1,12 +1,13 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Col, Layout, Row } from "antd";
-import { RouteComponentProps } from "react-router-dom";
 import { USER } from "../../lib/graphql/queries";
 import { User as UserData, UserVariables } from "../../lib/graphql/queries/User/__generated__/User";
 import { Viewer } from "../../lib/types";
 import { PageSkeleton, ErrorBanner } from "../../lib/components";
 import { UserProfile, UserListings, UserBookings } from "./components";
+import { useScrollTop } from "../../lib/hooks/useScrollTop";
 
 const { Content } = Layout;
 const PAGE_LIMIT = 4;
@@ -20,17 +21,21 @@ interface MatchParams {
   id: string;
 }
 
-const User = ({ match, viewer, setViewer }: RouteComponentProps<MatchParams> & Props) => {
+const User = ({ viewer, setViewer }: Props) => {
   const [listingsPage, setListingsPage] = useState(1);
   const [bookingsPage, setBookingsPage] = useState(1);
+  const { id } = useParams<MatchParams>();
   const { data, loading, error, refetch } = useQuery<UserData, UserVariables>(USER, {
     variables: {
-      id: match.params.id,
+      id,
       bookingsPage,
       listingsPage,
       limit: PAGE_LIMIT,
     },
+    fetchPolicy: "cache-and-network",
   });
+
+  useScrollTop();
 
   const handleUserRefetch = async () => {
     await refetch();
@@ -59,11 +64,9 @@ const User = ({ match, viewer, setViewer }: RouteComponentProps<MatchParams> & P
   }
 
   const user = data ? data.user : null;
-  const viewerIsUser = viewer.id === match.params.id;
+  const viewerIsUser = viewer.id === id;
   const userListings = user ? user.listings : null;
   const userBookings = user ? user.bookings : null;
-
-  console.log({ userListings, userBookings, user, viewerIsUser });
 
   const userProfileElement = user ? (
     <UserProfile

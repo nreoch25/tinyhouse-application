@@ -46,8 +46,6 @@ const UserProfile = ({ user, viewerIsUser, viewer, setViewer, handleUserRefetch 
     window.location.href = stripeAuthUrl;
   };
 
-  console.log({ user });
-
   const additionalDetails = user.hasWallet ? (
     <Fragment>
       <Paragraph>

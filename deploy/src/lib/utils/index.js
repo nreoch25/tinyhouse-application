@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authorize = void 0;
 const authorize = (db, req) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.get("X-CSRF-TOKEN");
-    console.log({ token, _id: req.signedCookies.viewer });
     const viewer = yield db.users.findOne({ _id: req.signedCookies.viewer, token });
     return viewer;
 });

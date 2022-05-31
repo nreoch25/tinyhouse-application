@@ -66,7 +66,6 @@ const CreateBookingModal = ({
     }
     const cardElement = elements?.getElement("card");
     const { token: stripeToken, error } = await stripe!.createToken(cardElement!);
-    console.log(stripeToken);
     if (stripeToken) {
       createBooking({
         variables: {

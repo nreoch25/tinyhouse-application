@@ -72,7 +72,6 @@ exports.listingResolvers = {
                     data.region = `${cityText}${adminText}${country}`;
                 }
                 let cursor = db.listings.find(query);
-                console.log({ query, cursor });
                 data.total = yield cursor.count();
                 if (filter && filter === types_2.ListingsFilter.PRICE_LOW_TO_HIGH) {
                     cursor = cursor.sort({ price: 1 });

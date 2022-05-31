@@ -85,8 +85,6 @@ export const listingResolvers: IResolvers = {
 
         let cursor = db.listings.find(query);
 
-        console.log({ query, cursor });
-
         data.total = await cursor.count();
 
         if (filter && filter === ListingsFilter.PRICE_LOW_TO_HIGH) {

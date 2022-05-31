@@ -157,8 +157,6 @@ const logInViaGoogle = async (
 const logInViaCookie = async (db: Database, req: Request, res: Response): Promise<User | null> => {
   const viewer = await db.users.findOne({ _id: req.signedCookies.viewer });
 
-  console.log({ viewer });
-
   if (!viewer) {
     res.clearCookie("viewer", cookieOptions);
   }
@@ -319,6 +317,16 @@ const viewerResolvers: IResolvers = {
         let viewer = await authorize(db, req);
         if (!viewer) {
           throw new Error("viewer cannot be found");
+        }
+
+        console.log({ viewer });
+
+        if (viewer.walletId) {
+          console.log({ walletId: viewer.walletId });
+          const wallet = await Stripe.disconnect(viewer.walletId);
+          if (!wallet) {
+            throw new Error("stripe disconnect error");
+          }
         }
 
         const updateRes = await db.users.findOneAndUpdate(

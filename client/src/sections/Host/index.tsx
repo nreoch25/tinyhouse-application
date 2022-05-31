@@ -12,6 +12,7 @@ import {
   HostListing as HostListingData,
   HostListingVariables,
 } from "../../lib/graphql/mutations/HostListing/__generated__/HostListing";
+import { useScrollTop } from "../../lib/hooks/useScrollTop";
 
 const { Content } = Layout;
 const { Text, Title } = Typography;
@@ -41,8 +42,9 @@ const Host = ({ viewer }: Props) => {
     }
   );
 
+  useScrollTop();
+
   const onFinish = (values: any) => {
-    console.log({ values });
     const fullAddress = `${values.address}, ${values.city}, ${values.state}, ${values.postalCode}`;
 
     const input = {

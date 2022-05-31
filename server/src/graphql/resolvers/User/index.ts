@@ -24,7 +24,6 @@ export const userResolvers: IResolvers = {
         }
 
         const viewer = await authorize(db, req);
-        console.log({ viewer });
         if (viewer && viewer._id === user._id) {
           user.authorized = true;
         }
@@ -51,8 +50,6 @@ export const userResolvers: IResolvers = {
       { db }: { db: Database }
     ): Promise<UserBookingsData | null> => {
       try {
-        console.log({ user });
-
         if (!user.authorized) {
           return null;
         }

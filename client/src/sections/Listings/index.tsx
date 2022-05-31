@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Affix, Layout, List, Typography } from "antd";
 import { ListingCard, ErrorBanner } from "../../lib/components";
@@ -10,6 +10,7 @@ import {
 } from "../../lib/graphql/queries/Listings/__generated__/Listings";
 import { ListingsFilter } from "../../lib/graphql/globalTypes";
 import { ListingsFilters, ListingsPagination, ListingsSkeleton } from "./components";
+import { useScrollTop } from "../../lib/hooks/useScrollTop";
 
 interface MatchParams {
   location: string;
@@ -21,24 +22,28 @@ const { Item } = List;
 
 const PAGE_LIMIT = 4;
 
-export const Listings = ({ match }: RouteComponentProps<MatchParams>) => {
-  const locationRef = useRef(match.params.location);
+export const Listings = () => {
+  const { location } = useParams<MatchParams>();
+  const locationRef = useRef(location);
   const [filter, setFilter] = useState(ListingsFilter.PRICE_LOW_TO_HIGH);
   const [page, setPage] = useState(1);
+
   const { data, loading, error } = useQuery<ListingsData, ListingsVariables>(LISTINGS, {
-    skip: locationRef.current !== match.params.location && page !== 1,
+    skip: locationRef.current !== location && page !== 1,
     variables: {
-      location: match.params.location,
+      location,
       filter,
       limit: PAGE_LIMIT,
       page,
     },
   });
 
+  useScrollTop();
+
   useEffect(() => {
     setPage(1);
-    locationRef.current = match.params.location;
-  }, [match.params.location]);
+    locationRef.current = location;
+  }, [location]);
 
   if (loading) {
     return (
